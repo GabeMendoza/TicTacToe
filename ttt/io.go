@@ -17,6 +17,7 @@ func colorReset() string {
 func PrintBoard(board Board, players []Player) {
   for l := 0; l < 3 ; l++ {
     line := []string{"", "", ""}
+    fmt.Println(" ----------- ")
 
     for c := 0 ; c < 3 ; c++ {
       index := l * 3 + c
@@ -31,8 +32,9 @@ func PrintBoard(board Board, players []Player) {
         }
       }
     }
-    fmt.Println(strings.Join(line, " | "))
+    fmt.Println("|", strings.Join(line, " | "), "|")
   }
+  fmt.Println(" ----------- ")
 }
 
 func PromptGetInput() string {
@@ -64,28 +66,39 @@ func PromptGetPlayableCell(board Board) int {
   return cell
 }
 
+func PromptGetCell(board Board, player Player) int {
+  PrintPlayerTurn(player)
+  cell := PromptGetPlayableCell(board)
+  fmt.Println()
+  return cell
+}
+
 func PromptPlayAgain() bool {
-  fmt.Println("Play again? (y/n)")
+  fmt.Println("Want to play again? (y/n)")
   return PromptGetBool()
 }
 
 func PrintTie() {
   fmt.Println("Oops, it seems that there is no winner...")
+  PrintBreak()
 }
 
 func PrintWin(winner Player) {
-  fmt.Printf("%s%s%s wins!\n", color(winner.Color), winner.Name, colorReset())
+  fmt.Printf("Congrats %s%s%s, you win!\n", color(winner.Color), winner.Name, colorReset())
+  PrintBreak()
 }
 
 func PrintPlayerTurn(player Player) {
-  fmt.Printf("%s%s%s's turn (%s%s%s) \n", color(player.Color), player.Name, colorReset(), color(player.Color), string(player.Symbol), colorReset())
+  fmt.Printf("%s%s%s (%s%s%s), it's your turn:\n", color(player.Color), player.Name, colorReset(), color(player.Color), string(player.Symbol), colorReset())
 }
 
-func PrintTurnBreak() {
-  fmt.Printf("\n\n")
+func PrintBreak() {
+  fmt.Println()
 }
 
 func PromptGetName(mark string, c int) string {
-  fmt.Printf("Name of %splayer %s%s:\n", color(c), mark, colorReset())
-  return PromptGetInput()
+  fmt.Printf("You're going to play the %s%s%ss, but what's your name?\n", color(c), mark, colorReset())
+  val := PromptGetInput()
+  PrintBreak()
+  return val
 }

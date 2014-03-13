@@ -28,14 +28,15 @@ func PlayNewGame() bool {
 func PlayGame(game ttt.Game) {
   player := game.FirstPlayer()
 
-  for !game.Board.IsOver() {
-    ttt.PrintBoard(game.Board, game.Players)
-    ttt.PrintPlayerTurn(player)
+  ttt.PrintBoard(game.Board, game.Players)
+  ttt.PrintBreak()
 
-    cell := ttt.PromptGetPlayableCell(game.Board)
+  for !game.Board.IsOver() {
+    cell := ttt.PromptGetCell(game.Board, player)
     game.Board.PlaceMove(cell, player)
 
-    ttt.PrintTurnBreak()
+    ttt.PrintBoard(game.Board, game.Players)
+    ttt.PrintBreak()
     player = game.NextPlayer(player)
   }
 }

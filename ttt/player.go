@@ -1,6 +1,7 @@
 package ttt
 
 type Player struct{
-  Name string
+  Name   string
   Symbol byte
+  Color  int
 }

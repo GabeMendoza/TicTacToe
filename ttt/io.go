@@ -6,7 +6,15 @@ import (
   "strconv"
 )
 
-func PrintBoard(board Board) {
+func color(c int) string {
+  return "\x1b[" + strconv.Itoa(c) + ";1m"
+}
+
+func colorReset() string {
+  return "\x1b[0m"
+}
+
+func PrintBoard(board Board, players []Player) {
   for l := 0; l < 3 ; l++ {
     line := []string{"", "", ""}
 
@@ -15,7 +23,12 @@ func PrintBoard(board Board) {
       if board.Cells[index] == 0 {
         line[c] = strconv.Itoa(index + 1)
       } else {
-        line[c] = string(board.Cells[index])
+        for _, player := range players {
+          if player.Symbol == board.Cells[index] {
+            line[c] = color(player.Color) + string(player.Symbol) + colorReset()
+            break
+          }
+        }
       }
     }
     fmt.Println(strings.Join(line, " | "))
@@ -61,18 +74,18 @@ func PrintTie() {
 }
 
 func PrintWin(winner Player) {
-  fmt.Printf("%s wins!\n", winner.Name)
+  fmt.Printf("%s%s%s wins!\n", color(winner.Color), winner.Name, colorReset())
 }
 
 func PrintPlayerTurn(player Player) {
-  fmt.Printf("%s's turn (%s) \n", player.Name, string(player.Symbol))
+  fmt.Printf("%s%s%s's turn (%s%s%s) \n", color(player.Color), player.Name, colorReset(), color(player.Color), string(player.Symbol), colorReset())
 }
 
 func PrintTurnBreak() {
   fmt.Printf("\n\n")
 }
 
-func PromptGetName(mark string) string {
-  fmt.Println("Name of player", mark)
+func PromptGetName(mark string, c int) string {
+  fmt.Printf("Name of %splayer %s%s:\n", color(c), mark, colorReset())
   return PromptGetInput()
 }

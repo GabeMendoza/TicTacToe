@@ -10,8 +10,8 @@ func NewGame() ttt.Game {
 }
 
 func InitPlayers() []ttt.Player {
-  player1 := ttt.Player{ttt.PromptGetName("X"), 'X'}
-  player2 := ttt.Player{ttt.PromptGetName("O"), 'O'}
+  player1 := ttt.Player{ttt.PromptGetName("X", 34), 'X', 34}
+  player2 := ttt.Player{ttt.PromptGetName("O", 36), 'O', 36}
 
   return []ttt.Player{player1, player2}
 }
@@ -29,7 +29,7 @@ func PlayGame(game ttt.Game) {
   player := game.FirstPlayer()
 
   for !game.Board.IsOver() {
-    ttt.PrintBoard(game.Board)
+    ttt.PrintBoard(game.Board, game.Players)
     ttt.PrintPlayerTurn(player)
 
     cell := ttt.PromptGetPlayableCell(game.Board)

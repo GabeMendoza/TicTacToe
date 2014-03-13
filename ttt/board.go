@@ -30,10 +30,7 @@ func (b Board) IsWinningAlign(align []int) bool {
   first2Equals   := b.Cells[align[0]] == b.Cells[align[1]]
   last2Equals    := b.Cells[align[1]] == b.Cells[align[2]]
 
-  if !firstCellEmpty && first2Equals && last2Equals {
-    return true
-  }
-  return false
+  return !firstCellEmpty && first2Equals && last2Equals
 }
 
 func (b Board) IsWon() bool {
@@ -60,10 +57,7 @@ func (b Board) HasEmptyCells() bool {
 }
 
 func (b Board) IsTie() bool {
-  if !b.HasEmptyCells() && !b.IsWon() {
-    return true
-  }
-  return false
+  return !b.HasEmptyCells() && !b.IsWon()
 }
 
 func (b Board) IsWinner(player Player) bool {
@@ -81,8 +75,5 @@ func (b Board) IsWinner(player Player) bool {
 }
 
 func (b Board) IsCellPlayable(cell int) bool {
-  if b.Cells[cell] == 0 {
-    return true
-  }
-  return false
+  return b.Cells[cell] == 0
 }

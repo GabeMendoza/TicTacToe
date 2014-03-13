@@ -1,9 +1,6 @@
 package main
 
-import (
-  "fmt"
-  "./ttt"
-)
+import "./ttt"
 
 func NewGame() ttt.Game {
   players := InitPlayers()
@@ -12,56 +9,45 @@ func NewGame() ttt.Game {
   return ttt.Game{board, players}
 }
 
-func InitPlayers() [2]ttt.Player {
-  var players [2]ttt.Player
-  marks := [2]byte{'X', 'O'}
+func InitPlayers() []ttt.Player {
+  player1 := ttt.Player{ttt.PromptGetName("X"), 'X'}
+  player2 := ttt.Player{ttt.PromptGetName("O"), 'O'}
 
-  for i := 0; i < 2; i++ {
-    fmt.Println("Name of player", string(marks[i]))
-    name := ttt.PromptGetInput()
-    players[i] = ttt.Player{name, marks[i]}
-  }
-
-  return players
+  return []ttt.Player{player1, player2}
 }
 
-func PlayGame() bool {
+func PlayNewGame() bool {
   game := NewGame()
 
-  for PlayRound(game.Board, game.Players) {}
-
-  if game.Board.IsTie() {
-    fmt.Println("Oops, it seems that there is no winner...")
-  }
-  if game.Board.IsWon() {
-    for _, player := range game.Players {
-      if game.Board.IsWinner(player) {
-        fmt.Printf("%s wins!\n", player.Name)
-        break
-      }
-    }
-  }
+  PlayGame(game)
+  EndGame(game)
 
   return ttt.PromptPlayAgain()
 }
 
-func PlayRound(board ttt.Board, players [2]ttt.Player) bool {
-  for _, player := range players {
-    ttt.PrintBoard(board)
-    fmt.Printf("%s's turn (%s) \n", player.Name, string(player.Symbol))
+func PlayGame(game ttt.Game) {
+  player := game.FirstPlayer()
 
-    cell := ttt.PromptGetPlayableCell(board)
-    board.PlaceMove(cell, player)
+  for !game.Board.IsOver() {
+    ttt.PrintBoard(game.Board)
+    ttt.PrintPlayerTurn(player)
 
-    fmt.Printf("\n\n")
+    cell := ttt.PromptGetPlayableCell(game.Board)
+    game.Board.PlaceMove(cell, player)
 
-    if board.IsOver() {
-      return false
-    }
+    ttt.PrintTurnBreak()
+    player = game.NextPlayer(player)
   }
-  return true
+}
+
+func EndGame(game ttt.Game) {
+ if game.Board.IsTie() {
+    ttt.PrintTie()
+  } else if game.Board.IsWon() {
+    ttt.PrintWin(*game.Winner())
+  }
 }
 
 func main() {
-  for PlayGame() {}
+  for PlayNewGame() {}
 }

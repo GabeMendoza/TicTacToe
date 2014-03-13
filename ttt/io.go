@@ -53,5 +53,26 @@ func PromptGetPlayableCell(board Board) int {
 
 func PromptPlayAgain() bool {
   fmt.Println("Play again? (y/n)")
-  return ttt.PromptGetBool()
+  return PromptGetBool()
+}
+
+func PrintTie() {
+  fmt.Println("Oops, it seems that there is no winner...")
+}
+
+func PrintWin(winner Player) {
+  fmt.Printf("%s wins!\n", winner.Name)
+}
+
+func PrintPlayerTurn(player Player) {
+  fmt.Printf("%s's turn (%s) \n", player.Name, string(player.Symbol))
+}
+
+func PrintTurnBreak() {
+  fmt.Printf("\n\n")
+}
+
+func PromptGetName(mark string) string {
+  fmt.Println("Name of player", mark)
+  return PromptGetInput()
 }
